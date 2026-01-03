@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App - Funcionando</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .city {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .country {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .temp {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 20px;
+        }
+        
+        .weather-icon {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .weather-desc {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+            text-transform: capitalize;
+        }
+        
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .detail-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .detail-label {
+            display: block;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .error {
+            background: #ffeaea;
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .error.active {
+            display: block;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            display: none;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .success {
+            text-align: center;
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤️ Weather App</h1>
+        <p class="subtitle">Clima en tiempo real - 100% funcional</p>
+        
+        <div class="search-box">
+            <input type="text" id="cityInput" placeholder="Ej: Madrid, Tokyo, New York" value="Madrid">
+            <button onclick="getWeather()">Buscar</button>
+        </div>
+        
+        <div class="loading" id="loading">Cargando datos del clima...</div>
+        
+        <div class="error" id="error"></div>
+        
+        <div class="result" id="weatherResult">
+            <div class="weather-header">
+                <div class="city" id="cityName">Ciudad</div>
+                <div class="country" id="country">País</div>
+            </div>
+            
+            <div class="weather-main">
+                <div class="temp" id="temperature">--°C</div>
+                <img class="weather-icon" id="weatherIcon" src="" alt="Clima">
+            </div>
+            
+            <div class="weather-desc" id="weatherDescription">--</div>
+            
+            <div class="details">
+                <div class="detail-box">
+                    <span class="detail-label">Sensación</span>
+                    <span class="detail-value" id="feelsLike">--°C</span>
+                </div>
+                <div class="detail-box">
+                    <span class="detail-label">Humedad</span>
+                    <span class="detail-value" id="humidity">--%</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="success" id="success">✅ API funcionando correctamente</div>
+    </div>
+
+    <script>
+        const cityInput = document.getElementById('cityInput');
+        const weatherResult = document.getElementById('weatherResult');
+        const errorDiv = document.getElementById('error');
+        const loadingDiv = document.getElementById('loading');
+        const successDiv = document.getElementById('success');
+        
+        cityInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                getWeather();
+            }
+        });
+        
+        async function getWeather() {
+            const city = cityInput.value.trim();
+            if (!city) {
+                showError('Por favor, ingresa una ciudad');
+                return;
+            }
+            
+            // Mostrar loading
+            loadingDiv.classList.add('active');
+            errorDiv.classList.remove('active');
+            weatherResult.classList.remove('active');
+            successDiv.style.display = 'none';
+            
+            try {
+                console.log('Buscando:', city);
+                const response = await fetch(`/weather/${encodeURIComponent(city)}`);
+                console.log('Status:', response.status);
+                
+                const data = await response.json();
+                console.log('Datos:', data);
+                
+                loadingDiv.classList.remove('active');
+                
+                if (response.ok) {
+                    // Actualizar UI
+                    document.getElementById('cityName').textContent = data.ciudad;
+                    document.getElementById('country').textContent = data.pais;
+                    document.getElementById('temperature').textContent = data.temperatura;
+                    document.getElementById('feelsLike').textContent = data.sensacion_termica;
+                    document.getElementById('humidity').textContent = data.humedad;
+                    document.getElementById('weatherDescription').textContent = data.clima;
+                    document.getElementById('weatherIcon').src = data.icono;
+                    document.getElementById('weatherIcon').alt = data.clima;
+                    
+                    weatherResult.classList.add('active');
+                    successDiv.style.display = 'block';
+                } else {
+                    showError(`Error: ${data.error || 'No se encontró la ciudad'}`);
+                }
+            } catch (error) {
+                console.error('Error completo:', error);
+                loadingDiv.classList.remove('active');
+                showError('Error de conexión. Verifica que el servidor esté corriendo en localhost:3000');
+            }
+        }
+        
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+        }
+        
+        // Cargar al iniciar
+        window.onload = function() {
+            setTimeout(() => {
+                getWeather();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
