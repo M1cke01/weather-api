@@ -6,6 +6,13 @@
 
 API de clima construida con **Node.js y Express** que obtiene datos meteorológicos en tiempo real utilizando **Open-Meteo API**.  
 Proyecto **fullstack** que incluye una **API REST** y un **frontend web** para la consulta del clima por ciudad.
+---
+
+## 🧩 Project Reference
+
+This project is part of the **roadmap.sh Backend Projects**:
+
+👉 https://roadmap.sh/projects/weather-api-wrapper-service
 
 ---
 
@@ -13,7 +20,6 @@ Proyecto **fullstack** que incluye una **API REST** y un **frontend web** para l
 
 - Repository: https://github.com/M1cke01/weather-api
 - Local API: http://localhost:3000
-- https://roadmap.sh/projects/weather-api-wrapper-service
 
 ---
 
@@ -125,5 +131,6 @@ node index.js
 ## El servidor se ejecutará por defecto en:
 
 http://localhost:3000
+
 
 
