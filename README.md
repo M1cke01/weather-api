@@ -13,6 +13,7 @@ Proyecto **fullstack** que incluye una **API REST** y un **frontend web** para l
 
 - Repository: https://github.com/M1cke01/weather-api
 - Local API: http://localhost:3000
+- https://roadmap.sh/projects/weather-api-wrapper-service
 
 ---
 
@@ -124,4 +125,5 @@ node index.js
 ## El servidor se ejecutará por defecto en:
 
 http://localhost:3000
+
 
