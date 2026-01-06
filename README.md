@@ -9,6 +9,13 @@ Proyecto **fullstack** que incluye una **API REST** y un **frontend web** para l
 
 ---
 
+## 🔗 Project URL
+
+- Repository: https://github.com/M1cke01/weather-api
+- Local API: http://localhost:3000
+
+---
+
 ## ✨ Características Principales
 
 ### 🚀 Backend (API REST)
@@ -117,3 +124,4 @@ node index.js
 ## El servidor se ejecutará por defecto en:
 
 http://localhost:3000
+
